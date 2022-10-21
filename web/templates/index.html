@@ -7,15 +7,15 @@
   <body>
     <h1>Welcome to Fake Money Bank</h1>
     <h2>U can easily earn your fake money from our service!</h2>
-    <h2>Sign up now immediately!</h2>
-    <form action="{{ url_for('get_data') }}" method="post">
-      <label >Name</label><br>
-      <input type="text" id="name" name="name" value=""><br>
+    <h2>Sign up(Login) now immediately!</h2>
+    <form action="{{ url_for('sign_up') }}" method="post">
       <label >Account</label><br>
       <input type="text" id="account" name="account" value=""><br>
       <label >Password</label><br>
       <input type="text" id="password" name="password" value=""><br><br>
       <input type="submit" value="Submit">
     </form>
+
+    
   </body>
 </html>

@@ -9,7 +9,6 @@ c = conn.cursor()
 
 # create table
 c.execute(f"""create table if not exists {TABLENAME} (
-            name text,
             account text,
             password text,
             money integer)""")
@@ -18,14 +17,14 @@ c.execute("SELECT name FROM sqlite_master WHERE type='table';")
 print(c.fetchall())
 conn.commit()
 
-def insert_data(name, account, password, money=-100):
+def insert_data(account, password, money=-1000):
     c.execute(f"SELECT account FROM {TABLENAME}")
     res = [i[0] for i in c.fetchall()]
     
     if account in res:
         return False
     else:
-        c.execute(f"INSERT INTO {TABLENAME} VALUES ('{name}', '{account}', '{password}', {money})")
+        c.execute(f"INSERT INTO {TABLENAME} VALUES ('{account}', '{password}', {money})")
         conn.commit()
         return True
 
@@ -51,7 +50,7 @@ def show_all_data():
 def get_money(account, password):
     c.execute(f"SELECT money FROM {TABLENAME} WHERE account = '{account}' and password = '{password}'")
     res = c.fetchone()
-    if len(res):
+    if res is not None:
         return res[0]
     else:
         return False
@@ -97,8 +96,8 @@ while KEEP:
 
     elif worktype == 1:
         # create new account
-        name, account, password = data.split(",")
-        r = insert_data(name, account, password)
+        account, password = data.split(",")
+        r = insert_data(account, password)
         if r:
             serverMessage = 'Account created.'
         else:
@@ -113,7 +112,7 @@ while KEEP:
         if isinstance(r, bool) and r == False:
             serverMessage = 'Account or password not correct, plz try again.'
         else:
-            serverMessage = f'{account},{password},{r}'
+            serverMessage = f'{r}'
 
     elif worktype == 3:
         # update money
