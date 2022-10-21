@@ -1,8 +1,8 @@
 from flask import Flask, request, render_template
 import socket
 
-HOST = '127.0.0.1'
-PORT = 8822
+HOSTTOSERVER = '10.0.2.30'
+PORTTOSERVER = 8822
 
 app = Flask(__name__)
 
@@ -25,7 +25,7 @@ def sign_up():
         # --------------- block 1 ----------------- #
         print("block 1")
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect((HOST, PORT))
+        client.connect((HOSTTOSERVER, PORTTOSERVER))
 
         clientMessage = f"1:{account},{password}"
         client.sendall(clientMessage.encode())
@@ -39,7 +39,7 @@ def sign_up():
         # --------------- block 2 ----------------- #
         print("block 2")
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect((HOST, PORT))
+        client.connect((HOSTTOSERVER, PORTTOSERVER))
 
         clientMessage = f"2:{account},{password}"
         client.sendall(clientMessage.encode())
@@ -52,7 +52,7 @@ def sign_up():
         # --------------- block 3 ----------------- #
         print("block 3")
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect((HOST, PORT))
+        client.connect((HOSTTOSERVER, PORTTOSERVER))
 
         clientMessage = f"3:{account},{password}"
         client.sendall(clientMessage.encode())
@@ -70,4 +70,4 @@ def sign_up():
 
     
 if __name__ == "__main__":
-    app.run( debug=True)
+    app.run(host="0,0,0,0", port="5000", debug=True)

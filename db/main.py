@@ -67,7 +67,7 @@ show_all_data()
 
 
 
-HOST = '127.0.0.1'
+HOST = '10.0.2.40'
 PORT = 9977
 KEEP = True
 
