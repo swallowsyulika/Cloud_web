@@ -82,47 +82,50 @@ while KEEP:
 
     print('Client message is:', clientMessage)
 
-    if clientMessage == "stop":
+    # type 0: create data, 1: show data, 2: updata data
+    # example message >>  type:name,account,password
+    worktype, data = clientMessage.split(':')
+    worktype = int(worktype)
+    serverMessage = ""
+
+    if worktype == 0:
+        # stop server
         KEEP = False
         serverMessage = 'stop db server.'
         connt.sendall(serverMessage.encode())
         connt.close()
 
-    else:
-        # type 0: create data, 1: show data, 2: updata data
-        # example message >>  type:name,account,password
-        worktype, data = clientMessage.split(':')
-        worktype = int(worktype)
-        serverMessage = ""
+    elif worktype == 1:
+        # create new account
+        name, account, password = data.split(",")
+        r = insert_data(name, account, password)
+        if r:
+            serverMessage = 'Account created.'
+        else:
+            serverMessage = 'Account name repeated, plz try new account name.'
 
-        if worktype == 0:
-            name, account, password = data.split(",")
-            r = insert_data(name, account, password)
-            if r:
-                serverMessage = 'Account created.'
-            else:
-                serverMessage = 'Account name repeated, plz try new account name.'
+        show_all_data()
 
-            show_all_data()
+    elif worktype == 2:
+        # show money
+        account, password = data.split(",")
+        r = get_money(account, password)
+        if isinstance(r, bool) and r == False:
+            serverMessage = 'Account or password not correct, plz try again.'
+        else:
+            serverMessage = f'{account},{password},{r}'
 
-        elif worktype == 1:
-            account, password = data.split(",")
-            r = get_money(account, password)
-            if isinstance(r, bool) and r == False:
-                serverMessage = 'Account or password not correct, plz try again.'
-            else:
-                serverMessage = f'{account},{password},{r}'
+    elif worktype == 3:
+        # update money
+        account, password, money = data.split(",")
+        r = update_data(account, password, money)
+        if r:
+            serverMessage = 'Updata successed.'
+        else:
+            serverMessage = 'Account or password not correct, plz try again.'
 
-        elif worktype == 2:
-            account, password, money = data.split(",")
-            r = update_data(account, password, money)
-            if r:
-                serverMessage = 'Updata successed.'
-            else:
-                serverMessage = 'Account or password not correct, plz try again.'
-
-        connt.sendall(serverMessage.encode())
-        connt.close()
+    connt.sendall(serverMessage.encode())
+    connt.close()
 
 server.close()
 conn.close()

@@ -25,7 +25,7 @@ def get_data():
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((HOST, PORT))
 
-        clientMessage = f"{name},{account},{password}"
+        clientMessage = f"1:{name},{account},{password}"
         client.sendall(clientMessage.encode())
 
         serverMessage = str(client.recv(1024), encoding='utf-8')
@@ -37,5 +37,4 @@ def get_data():
     return f"<h1>Succeeded! Welcome, {name}, u are criminal now! (laugh.</h1>"
     
 if __name__ == "__main__":
-    print("a")
-    app.run(debug=True)
+    app.run(host="0,0,0,0", port="5000", debug=True)

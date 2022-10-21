@@ -11,28 +11,33 @@ server.listen(10)
 
 while KEEP:
     conn, addr = server.accept()
-    clientMessage = str(conn.recv(1024), encoding='utf-8')
+    clientMessageFromWeb = str(conn.recv(1024), encoding='utf-8')
 
-    print('Client message is:', clientMessage)
+    print('Client message is:', clientMessageFromWeb)
 
-    name, account, password = clientMessage.split(',')
+    worktype, data = clientMessageFromWeb.split(":")
+    worktype = int(worktype)
 
-    if name == "stop":
+    if worktype == 0:
+        # stop server
         KEEP = False
-        clientMessage = "stop"
-    else:
-        clientMessage = f"0:{name},{account},{password}"
+        clientMessageToDB = "0:"
+    elif worktype == 1:
+        # create account
+        name, account, password = data.split(',')
+        clientMessageToDB = f"1:{name},{account},{password}"
+
 
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((CLIENTHOST, CLIENTPORT))
-    client.sendall(clientMessage.encode())
+    client.sendall(clientMessageToDB.encode())
 
-    serverMessage = str(client.recv(1024), encoding='utf-8')
-    print('Server:', serverMessage)
+    serverMessageFromDB = str(client.recv(1024), encoding='utf-8')
+    print('Server:', serverMessageFromDB)
     client.close()
 
-    serverMessage = 'stop appaction server.'
-    conn.sendall(serverMessage.encode())
+    serverMessageToWeb = 'GOT'
+    conn.sendall(serverMessageToWeb.encode())
     conn.close()
 
 server.close()
