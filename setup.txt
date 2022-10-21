@@ -1,11 +1,12 @@
 echo "10.0.2.20 web web" | sudo tee -a /etc/hosts
 echo "10.0.2.30 app app" | sudo tee -a /etc/hosts
 echo "10.0.2.40 db db" | sudo tee -a /etc/hosts
-sudo echo source
+
 sudo apt update -y
 sudo apt-get install python3-pip -y
 git clone https://github.com/swallowsyulika/Cloud_web.git
-pip3 install -r ./Cloud_web/requirement.txt
+pip3 install -r ./Cloud_web/requirements.txt
+
 python3 ./Cloud_web/db/main.py
 python3 ./Cloud_web/server/main.py
 python3 ./Cloud_web/web/main.py
