@@ -1,5 +1,18 @@
 from flask import Flask, request, render_template
 import socket
+from minio import Minio
+
+client = Minio(
+        "play.min.io",
+        access_key="minioadmin",
+        secret_key="minioadmin",
+    )
+
+r = client.get_object("bucket", "main.css")
+data = r.read().decode("utf8")
+
+print(data)
+
 
 HOSTTOSERVER = '192.168.56.30'
 PORTTOSERVER = 8822
@@ -8,7 +21,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", css=data)
 
 @app.route('/', methods =["GET", "POST"])
 def sign_up():
@@ -65,7 +78,7 @@ def sign_up():
     else:
         return render_template("index.html")
 
-    return render_template("signup.html", name=account, money=money)
+    return render_template("signup.html", css=data, name=account, money=money)
 
 
     
