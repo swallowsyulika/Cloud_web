@@ -10,18 +10,18 @@ def main():
         secret_key="minioadmin",
     )
 
-    found = client.bucket_exists("minio")
+    found = client.bucket_exists("bucket")
     if not found:
-        client.make_bucket("minio")
+        client.make_bucket("bucket")
     else:
-        print("Bucket 'minio' already exists")
+        print("Bucket 'bucket' already exists")
 
     client.fput_object(
-        "minio", "main.css", "./main.css",
+        "bucket", "main.css", "./Cloud_web/min/main.css",
     )
     print(
         "'./main.css' is successfully uploaded as "
-        "object 'main.css' to bucket 'minio'."
+        "object 'main.css' to bucket 'bucket'."
     )
 
 
